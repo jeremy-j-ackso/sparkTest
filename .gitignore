@@ -1,0 +1,6 @@
+*~
+*.swp
+log_file
+*.deb
+*.tgz
+.vagrant
