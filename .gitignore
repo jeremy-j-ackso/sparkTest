@@ -4,3 +4,12 @@ log_file
 *.deb
 *.tgz
 .vagrant
+*.log
+*.aux
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.pdf
+examples
