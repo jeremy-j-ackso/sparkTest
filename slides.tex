@@ -1,0 +1,174 @@
+\documentclass[pdf]{beamer}
+\usepackage{hyperref}
+%\usepackage{listings}
+
+\mode<presentation>{}
+
+%% preamble
+
+\title{Spark + R + RStudio}
+%\subtitle{}
+\author{\href{mailto:jeremy_j@ackso.net}{Jeremy Jackson}}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+%\begin{frame}{Frame Title}
+%	Body of frame
+%\end{frame}
+
+\begin{frame}{Overview}
+    \begin{itemize}
+	\item Development environments and why you should use them.
+	\item What is Spark?
+	\item Setting up a local Spark + R + RStudio cluster
+	\item SparkR and sparklyr 
+	\item Scaling to production
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Resources}
+    Apache Spark: \url{https://spark.apache.org}\\
+    RStudio Server: \url{https://rstudio.com}\\
+    RStudio sparklyr: \url{https://spark.rstudio.com}\\
+    Jeremy's Github repo: \url{https://github.com/jeremy-j-ackso/sparkTest}\\
+
+    \begin{verbatim}
+	git clone https://github.com/jeremy-j-ackso/sparkTest.git
+    \end{verbatim}
+\end{frame}
+
+\begin{frame}{Development environments and why you should use them}
+    \begin{itemize}
+	\item A virtual machine that is configured nearly identically to your deployment target.
+	\item Might be small enough to live on your computer.
+	\item Might be big enought to require a dedicated environment on a server or in a cluster.
+	\item Causes everyone working on the project to have complete agreement on what is actually installed to the server. Or at least forces that discussion to occur.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Development environments and why you should use them}
+    \begin{itemize}
+	\item Makes it easier to catch errors.
+	\item Makes it easier to catch misconfigurations.
+	\item Lets you see how your code or model works in the context of other tenant systems.
+	\item Configurations live in Version Control System.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What is Spark?}
+    Spark is an in-memory parallel computing framework for manipulating and analyzing data.
+
+\vspace{10pt}
+
+    It is sponsored by DataBricks and the Apache Software Foundation.
+
+\vspace{10pt}
+
+    As of version 2.0 (released a few months ago) R is a fully-supported language, joining Python and Scala.
+
+\vspace{10pt}
+
+    Connectors exist for a large variety of databases: Hadoop, HBase, Cassanrda, MongoDB, ...
+
+\vspace{10pt}
+
+    It can also read a large number of file formats: ORC, Avro, Parquet, JSON, CSV, ....
+\end{frame}
+
+\begin{frame}{Setting up a local Spark + R + RStudio cluster}
+    You need to have installed:
+    \begin{itemize}
+	\item Virtualbox
+	\item Vagrant
+    \end{itemize}
+
+    It's a good idea (but not required) to have downloaded:
+    \begin{itemize}
+	\item The Ubuntu Trusty 64 (14.04) Vagrant Box
+	\item Spark deb-formatted binaries
+	\item RStudio Server deb-formatted binaries
+    \end{itemize}
+
+    If you don't already have these downloaded, you might not be able to follow along (they're some large downloads), but we can talk more about it later.
+\end{frame}
+
+\begin{frame}[fragile]{Setting up a local Spark + R + RStudio cluster}
+    So what now?
+
+    I've put together some handy code for you:
+    \begin{verbatim}
+	git clone https://github.com/jeremy-j-ackso/sparkTest.git
+    \end{verbatim}
+
+    What you get:
+    \begin{itemize}
+	\item The \LaTeX\ code for these slides
+	\item A Vagrantfile which contains Virtualbox configuration information, plus calls to the following files as appropriate.
+	\item A systemSetup.sh file, which Vagrant will run when you provision a single-node Spark virtual machine.
+	\item A masterSetup.sh file, which Vagrant will run when you provision the master node of a Spark virtual machine cluster.
+	\item A followerSetup.sh file, which Vagrant will run when you provision the follower node(s) of a Spark virtual machine cluster.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Setting up a local Spark + R + RStudio cluster}
+    Let's jump to a shell and take a look around.
+\end{frame}
+
+\begin{frame}{SparkR and sparklyr}
+    SparkR is the R package that comes with Spark.
+
+    It provides an R API into Spark and allows access to everything in Spark.
+
+\vspace{20pt}
+
+    sparklyr is RStudio's dplyr-compliant meta-package over SparkR.
+
+    sparklyr even includes additional functionality to install Spark locally on your machine in single-node mode. Good for test drives, bad if you're prototyping code that will need to be geared for your target environment.
+
+    You can probably also connect it into a running Spark cluster, but I have not tried this out.
+
+    It is not available on CRAN at the moment, so install it using \texttt{devtools::install\_github}
+\end{frame}
+
+\begin{frame}{SparkR and sparklyr}
+    Let's login to the RStudio server running on our cluster and try them out.
+\end{frame}
+
+\begin{frame}{Scaling to production}
+    You have some work to do first:
+    \begin{itemize}
+	\item Work with others on your team (like the Sysadmins) to review and improve the security of your system setup files.
+	\item Modify your system setup files for the full scale that they will need be running at. For instance, adding all of the other IP addresses to the \texttt{/etc/hosts} file.
+	\item Make sure that the integration tests are covering your code.
+	\item One it's running and in production, you should be able to login to RStudio to run your ad hoc analyses and work with your scheduled R scripts.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Scaling to production}
+    If you're working alone or on a small team, you might have a bit more leeway.
+    \begin{itemize}
+	\item Launch your cluster on a cloud hosting service (AWS, Azure, Google Cloud, Digitial Ocean, ...)
+	\item Modify your configuration scripts for security and the scale of your cluster.
+	\item Run your configuration scripts across your cluster to get them all working together.
+	\item Login to RStudio Server and get to work!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Scaling to production}
+    Many managed cloud services also provide Spark as part of their Hadoop distribution. You just have to configure a VM in the cluster you spin up to run R and RStudio, which you can pull out of your system setup shell files.
+    \begin{itemize}
+	\item AWS
+	\item Azure
+	\item Google Cloud
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Thank you!}
+Questions?
+\end{frame}
+
+\end{document}
