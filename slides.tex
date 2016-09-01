@@ -9,6 +9,7 @@
 \title{Spark + R + RStudio}
 %\subtitle{}
 \author{\href{mailto:jeremy_j@ackso.net}{Jeremy Jackson}}
+\date{August 31, 2016}
 
 \begin{document}
 
@@ -45,7 +46,7 @@
     \begin{itemize}
 	\item A virtual machine that is configured nearly identically to your deployment target.
 	\item Might be small enough to live on your computer.
-	\item Might be big enought to require a dedicated environment on a server or in a cluster.
+	\item Might be big enough to require a dedicated environment on a server or in a cluster.
 	\item Causes everyone working on the project to have complete agreement on what is actually installed to the server. Or at least forces that discussion to occur.
     \end{itemize}
 \end{frame}
@@ -54,13 +55,13 @@
     \begin{itemize}
 	\item Makes it easier to catch errors.
 	\item Makes it easier to catch misconfigurations.
-	\item Lets you see how your code or model works in the context of other tenant systems.
+	\item Lets you see how your code or model works in the context of other tenant systems without the risk of blowing up any mission-critical systems.
 	\item Configurations live in Version Control System.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{What is Spark?}
-    Spark is an in-memory parallel computing framework for manipulating and analyzing data.
+    Spark is an in-memory parallel computing framework for manipulating and analyzing data that can run across a cluster.
 
 \vspace{10pt}
 
@@ -88,12 +89,12 @@
 
     It's a good idea (but not required) to have downloaded:
     \begin{itemize}
-	\item The Ubuntu Trusty 64 (14.04) Vagrant Box
+	\item The Ubuntu Trusty 64 (14.04) Vagrant Box. This is not the Ubuntu ISO you would normally use.
 	\item Spark deb-formatted binaries
 	\item RStudio Server deb-formatted binaries
     \end{itemize}
 
-    If you don't already have these downloaded, you might not be able to follow along (they're some large downloads), but we can talk more about it later.
+    If you don't already have these downloaded, you might not be able to follow along (they're large downloads), but we can talk more about it later.
 \end{frame}
 
 \begin{frame}[fragile]{Setting up a local Spark + R + RStudio cluster}
@@ -129,22 +130,21 @@
 
     sparklyr even includes additional functionality to install Spark locally on your machine in single-node mode. Good for test drives, bad if you're prototyping code that will need to be geared for your target environment.
 
-    You can probably also connect it into a running Spark cluster, but I have not tried this out.
-
-    It is not available on CRAN at the moment, so install it using \texttt{devtools::install\_github}
+    It is not available on CRAN at the moment, so install it using \texttt{devtools::install\_github(`rstudio/sparklyr')}
 \end{frame}
 
 \begin{frame}{SparkR and sparklyr}
-    Let's login to the RStudio server running on our cluster and try them out.
+    Let's login to the RStudio server running on our cluster and try out SparkR.
 \end{frame}
 
 \begin{frame}{Scaling to production}
     You have some work to do first:
     \begin{itemize}
+	\item Figure out what configuration change needs to made so that the master and follower nodes properly talk to one another.
 	\item Work with others on your team (like the Sysadmins) to review and improve the security of your system setup files.
 	\item Modify your system setup files for the full scale that they will need be running at. For instance, adding all of the other IP addresses to the \texttt{/etc/hosts} file.
 	\item Make sure that the integration tests are covering your code.
-	\item One it's running and in production, you should be able to login to RStudio to run your ad hoc analyses and work with your scheduled R scripts.
+	\item Once it's running and in production, you should be able to login to RStudio to run your ad hoc analyses and work with your scheduled R scripts.
     \end{itemize}
 \end{frame}
 
@@ -160,10 +160,13 @@
 
 \begin{frame}{Scaling to production}
     Many managed cloud services also provide Spark as part of their Hadoop distribution. You just have to configure a VM in the cluster you spin up to run R and RStudio, which you can pull out of your system setup shell files.
+
+    You don't have to have R and RStudio running on your master node like we have in this example.
     \begin{itemize}
 	\item AWS
 	\item Azure
 	\item Google Cloud
+	\item ...
     \end{itemize}
 \end{frame}
 
