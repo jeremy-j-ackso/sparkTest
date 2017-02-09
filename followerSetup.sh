@@ -8,7 +8,7 @@ cp /vagrant/spark-2.1.0-bin-hadoop2.7.tgz ./
 
 ## Installs software from repos.
 apt-get -y update
-apt-get -y install openjdk-7-jdk build-essential 
+apt-get -y install openjdk-8-jdk build-essential 
 
 ## Opens up firewall ports. This is probably unsecure. Should have a network admin advise before putting into production.
 #ufw allow from 192.168.1.0/24
