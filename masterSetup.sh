@@ -18,7 +18,7 @@ cp /vagrant/rstudio-server-1.0.136-amd64.deb ./
 
 ## Installs software from repos.
 apt-get -qy update
-apt-get -yq install openjdk-8-jdk r-base r-base-dev build-essential gdebi-core
+apt-get -yq install openjdk-8-jdk r-base r-base-dev build-essential gdebi-core libcurl4-openssl-dev
 
 ## Configures firewall. Probably not the most secure way to do this. Need to talk to a network admin about it.
 #ufw allow 192.168.1.0/24
