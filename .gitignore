@@ -2,7 +2,7 @@
 *.swp
 log_file
 *.deb
-*.tgz
+*.tgz*
 .vagrant
 *.log
 *.aux
@@ -13,3 +13,5 @@ log_file
 *.vrb
 *.pdf
 examples
+*.json
+*.tar.gz
