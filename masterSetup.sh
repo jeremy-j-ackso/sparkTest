@@ -18,7 +18,7 @@ cp /vagrant/rstudio-server-1.0.136-amd64.deb ./
 
 ## Installs software from repos.
 apt-get -qy update
-apt-get -yq install openjdk-8-jdk r-base r-base-dev build-essential gdebi-core libcurl4-openssl-dev
+apt-get -yq install openjdk-8-jdk r-base r-base-dev build-essential gdebi-core libcurl4-openssl-dev libxml2-dev
 
 ## Configures firewall. Probably not the most secure way to do this. Need to talk to a network admin about it.
 #ufw allow 192.168.1.0/24
@@ -39,20 +39,35 @@ echo "SPARK_HOME=\"/opt/spark-2.0.0-bin-hadoop2.7\"" > /etc/profile.d/paths.sh
 echo "PATH=\"\$PATH:\$SPARK_HOME/bin:\$SPARK_HOME/sbin\"" >> /etc/profile.d/paths.sh
 echo "export PATH" >> /etc/profile.d/paths.sh
 
-## Installs RStudio Server.
-#gdebi -n rstudio-server-0.99.903-amd64.deb 
-gdebi -nq rstudio-server-1.0.136-amd64.deb 
-
 ## Cofigures R so that it can find the SparkR library.
 echo ".libPaths('/opt/spark-2.0.0-bin-hadoop2.7/R/lib')" >> /etc/R/Rprofile.site
 echo "if (nchar(Sys.getenv(\"SPARK_HOME\")) < 1) Sys.setenv(SPARK_HOME = \"/opt/spark-2.0.0-bin-hadoop2.7\")" >> /etc/R/Rprofile.site
 
-## Restart RStudio so that the previous changes can take affect.
-rstudio-server restart
+## Bring in the spark-env.sh file
+#cp /vagrant/spark-env.sh $SPARK_HOME/conf/spark-env.sh
 
 ## There should also be more security around users here.
-chown vagrant:vagrant /opt/spark-2.0.0-bin-hadoop2.7
+chown -R vagrant:vagrant /opt/spark-2.0.0-bin-hadoop2.7
 
 ## Change this to reflect all of the IP addresses for every node in the cluster.
-echo "192.168.1.100 master" >> /etc/hosts
-echo " 192.168.1.101 follower" >> /etc/hosts
+echo "10.2.0.15 master" >> /etc/hosts
+echo " 10.2.0.16 follower" >> /etc/hosts
+
+## Create a conf/slaves file so that the master can find the follower for the autostart script.
+echo "master" > /opt/spark-2.0.0-bin-hadoop2.7/conf/slaves
+echo "follower" >> /opt/spark-2.0.0-bin-hadoop2.7/conf/slaves
+
+## Set up SSH keys
+ssh-keygen -N "" -f /home/vagrant/.ssh/id_rsa
+cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+
+## Set this machine to always be the master.
+#touch /opt/spark-2.0.0-bin-hadoop2.7/conf/spark-env.sh
+#echo "SPARK_MASTER_HOST = master" > /opt/spark-2.0.0-bin-hadoop2.7/conf/spark-env.sh
+
+## Installs RStudio Server.
+#gdebi -n rstudio-server-0.99.903-amd64.deb 
+gdebi -nq rstudio-server-1.0.136-amd64.deb 
+
+chown -R vagrant:vagrant /home/vagrant/*
+chown -R vagrant:vagrant /home/vagrant/.*

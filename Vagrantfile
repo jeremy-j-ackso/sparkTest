@@ -18,7 +18,7 @@ Vagrant.configure(2) do |config|
 		vb.cpus = "2"
 	end
 	master.vm.network "forwarded_port", guest: 8787, host: 8787 #RStudio
-	master.vm.network "forwarded_port", guest: 4040, host: 8081 #Spark Web UI
+	master.vm.network "forwarded_port", guest: 8080, host: 8081 #Spark Web UI
 	#master.vm.network "private_network", ip: "192.168.1.100"
   end
   #!!--End Single-Node Spark config--!!#
@@ -34,7 +34,7 @@ Vagrant.configure(2) do |config|
 		vb.cpus = "2"
 	end
 	master.vm.network "forwarded_port", guest: 8787, host: 8787 #RStudio
-	master.vm.network "forwarded_port", guest: 4040, host: 8081 #Spark Master Web UI
+	master.vm.network "forwarded_port", guest: 8080, host: 8081 #Spark Master Web UI
 	master.vm.network "private_network", ip: "10.2.0.15"
   end
 
@@ -47,7 +47,7 @@ Vagrant.configure(2) do |config|
 		vb.memory="2048"
 		vb.cpus="2"
 	end
-	follower.vm.network "forwarded_port", guest: 4040, host: 8082 #Spark Worker Web UI
+	follower.vm.network "forwarded_port", guest: 8081, host: 8082 #Spark Worker Web UI
 	follower.vm.network "private_network", ip: "10.2.0.16"
   end
   #!!--End spark cluster configs--!!#

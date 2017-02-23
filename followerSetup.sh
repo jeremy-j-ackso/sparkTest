@@ -25,9 +25,19 @@ echo "SPARK_HOME=\"/opt/spark-2.0.0-bin-hadoop2.7\"" > /etc/profile.d/paths.sh
 echo "PATH=\"\$PATH:\$SPARK_HOME/bin:\$SPARK_HOME/sbin\"" >> /etc/profile.d/paths.sh
 echo "export PATH" >> /etc/profile.d/paths.sh
 
+## Bring in the spark-env.sh file
+#cp /vagrant/spark-env.sh $SPARK_HOME/conf/spark-env.sh
+
 ## There should also be more security around users here.
-chown vagrant:vagrant /opt/spark-2.0.0-bin-hadoop2.7
+chown -R vagrant:vagrant /opt/spark-2.0.0-bin-hadoop2.7
 
 ## Change this to reflect all of the IP addresses for every node in the cluster.
-echo "192.168.1.100 master" >> /etc/hosts
-echo "192.168.1.101 follower" >> /etc/hosts
+echo "10.2.0.15 master" >> /etc/hosts
+echo "10.2.0.16 follower" >> /etc/hosts
+
+## Set this machine to always be the master.
+#echo "SPARK_MASTER_HOST = master" > /opt/spark-2.0.0-bin-hadoop2.7/conf/spark-env.sh
+#echo "SPARK_LOCAL_IP = 10.0.2.16" > /opt/spark-2.0.0-bin-hadoop2.7/conf/spark-env.sh
+
+## Grab the public ssh key from the place.
+#echo /vagrant/vagrancy_rsa.pub >> /home/vagrant/.ssh/authorized_keys
