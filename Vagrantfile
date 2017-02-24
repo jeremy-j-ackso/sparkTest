@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
 	master.vm.box = "bento/ubuntu-16.04"
 	master.vm.provision "shell", path: "systemSetup.sh"
 	master.vm.provider "virtualbox" do |vb|
-		vb.memory="2048"
+		vb.memory="3072"
 		vb.cpus = "2"
 	end
 	master.vm.network "forwarded_port", guest: 8787, host: 8787 #RStudio
@@ -30,7 +30,7 @@ Vagrant.configure(2) do |config|
 	master.vm.box = "bento/ubuntu-16.04"
 	master.vm.provision "shell", path: "masterSetup.sh"
 	master.vm.provider "virtualbox" do |vb|
-		vb.memory="2048"
+		vb.memory="3072"
 		vb.cpus = "2"
 	end
 	master.vm.network "forwarded_port", guest: 8787, host: 8787 #RStudio
